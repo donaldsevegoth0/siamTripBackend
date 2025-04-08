@@ -1,4 +1,4 @@
-import translationText from "file:///E:/siamTripBackend/services/addPhraseService.js";
+import translationText from "../services/addPhraseService.js";
 
 const getTranslations = async (req, res) => {
     try {
