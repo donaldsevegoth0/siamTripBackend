@@ -19,8 +19,8 @@ const login = async (req, res) => {
     res.json({ 
         success: true,
         data: {
-          name: user.name,
-          avatar: user.avatar,
+          name: user.nickName,
+          avatar: user.avatarUrl,
           token: token,
         }, 
     });
