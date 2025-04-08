@@ -9,6 +9,12 @@ import Phrases from "./models/phraseModel.js";
 
 const app = express();
 
+// Middleware to parse JSON bodies
+app.use(express.json()); // for JSON payloads
+
+// Middleware to parse URL-encoded bodies (if you're using form submissions)
+app.use(express.urlencoded({ extended: true }));
+
 
 // 连接数据库
 connectDB();
