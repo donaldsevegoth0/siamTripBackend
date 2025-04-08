@@ -16,7 +16,14 @@ const login = async (req, res) => {
     }
 
     const token = pkg.sign({ id: user._id, openid: user.openid }, 'SIAMTRIP_a84b9c9b2b32417d8e1caa7f491e837c', { expiresIn: '7d' });
-    res.json({ token });
+    res.json({ 
+        success: true,
+        data: {
+          name: user.name,
+          avatar: user.avatar,
+          token: token,
+        }, 
+    });
 };
 
 export default { login };
