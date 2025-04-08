@@ -5,6 +5,7 @@ import phraseRoutes from "./routes/phraseRoutes.js";
 import translateRoutes from "./routes/translateRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import Phrases from "./models/phraseModel.js";
+import postRoutes from "./routes/postRoutes.js";
 
 
 const app = express();
@@ -33,6 +34,8 @@ app.use("/api", phraseRoutes);
 app.use('/api', userRoutes);
 app.use("/api", categoryRoutes);
 app.use("/api", phraseRoutes);
+app.use("/api", postRoutes);
+app.use('/api', postRoutes);
 
 
 const PORT = process.env.PORT || 3000;
