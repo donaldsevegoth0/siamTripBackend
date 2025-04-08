@@ -6,8 +6,9 @@ import translateRoutes from "./routes/translateRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import Phrases from "./models/phraseModel.js";
 
+
 const app = express();
-app.use(express.json());
+
 
 // 连接数据库
 connectDB();
@@ -30,6 +31,8 @@ app.use("/api", phraseRoutes);
 app.use("/api", translateRoutes);
 app.use("/api", phraseRoutes);
 app.use('/api', userRoutes);
+app.use("/api", categoryRoutes);
+app.use("/api", phraseRoutes);
 
 
 const PORT = process.env.PORT || 3000;
