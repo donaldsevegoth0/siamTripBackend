@@ -1,5 +1,5 @@
 import express from "express";
-import { getTranslations } from "file:///E:/siamTripBackend/controllers/translationController.js";
+import { getTranslations } from "../controllers/translationController.js";
 
 const router = express.Router();
 
