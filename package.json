@@ -1,24 +1,32 @@
 {
   "name": "siamtripbackend",
   "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "main": "app.js",
   "type": "module",
   "keywords": [],
   "author": "David",
   "license": "ISC",
   "dependencies": {
+    "@google-cloud/text-to-speech": "^5.8.1",
+    "axios": "^1.8.1",
     "cors": "^2.8.5",
+    "crypto": "^1.0.1",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
-    "mongoose": "^8.10.0"
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.10.0",
+    "ws": "^8.18.1"
   },
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "siamTripBackend"
   },
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  },
+  "scripts": {
+    "start": "nodemon app.js",
+    "dev": "nodemon app.js"
+  }
 }
