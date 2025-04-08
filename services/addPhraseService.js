@@ -1,11 +1,13 @@
 import axios from "axios";
 import Phrases from "../models/phraseModel.js";
+import dotenv from 'dotenv';
 
-const GOOGLE_TTS_API_KEY = "AIzaSyADQwmKTK-P-yBBZB803qSDAnuzg5gSfiI"; // 你的 Google API Key
-const TTS_URL = `https://texttospeech.googleapis.com/v1/text:synthesize?key=${GOOGLE_TTS_API_KEY}`;
+dotenv.config();
+const GOOGLE_TTS_API_KEY = process.env.GOOGLE_TTS_API_KEY;
+const TTS_URL = `${process.env.TTS_URL}${GOOGLE_TTS_API_KEY}`;
 
-const GITHUB_REPO = "donaldsevegoth0/siamTripAudio"; // GitHub 仓库
-const GITHUB_TOKEN = "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"; // GitHub 访问令牌
+const GITHUB_REPO = process.env.GITHUB_REPO;
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 
 // 1. 翻译文本
 async function translateText(chinese) {
