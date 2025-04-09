@@ -166,7 +166,7 @@ const addFavorite = async (postId, userId) => {
         if (!post) {
             throw new Error('Post not found');
         }
-
+        console.log(post.favoritedBy);
         // 判断该用户是否已经收藏
         if (post.favoritedBy.some(fav => fav.toString() === userId)) {
             removeFavorite(postId, userId);
