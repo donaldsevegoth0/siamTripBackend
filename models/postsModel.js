@@ -23,7 +23,10 @@ const postSchema = new Schema({
     views: { type: Number, default: 0 }, // 观看数
 }, { timestamps: true });
 
+postSchema.index({ title: 'text', describe: 'text', location: 'text' });
+
 const Post = model('Post', postSchema);
+
 
 export default Post;
 
