@@ -105,6 +105,30 @@ const searchPosts = async (req, res) => {
     }
 }
 
+// 处理收藏
+const handleFavorite = async (req, res) => {
+    const { postId } = req.params;  // 帖子 ID
+    const { userId } = req.body;    // 用户 ID
+
+    try {
+        const updatedPost = await postService.addFavorite(postId, userId);
+        res.status(200).json(updatedPost);  // 返回更新后的帖子
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+};
+
+const getUserCollection = async (req, res) => {
+    const { userId } = req.params;
+
+    try {
+        const posts = await postService.getUserCollections(userId);
+        res.status(200).json(posts);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 export default {
-    getUserPosts, getPosts, getTop10RecommendedPosts, increasePostView, handleLike, handleShare, createPost, searchPosts
+    getUserCollection, getUserPosts, getPosts, getTop10RecommendedPosts, increasePostView, handleLike, handleShare, createPost, searchPosts, handleFavorite
 };

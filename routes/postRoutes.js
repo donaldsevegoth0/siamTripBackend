@@ -14,4 +14,7 @@ router.patch('/:postId/shares', postController.handleShare);
 router.post('/postNewPlan', postController.createPost);
 router.get('/userPosts', postController.getUserPosts);
 router.get('/searchPosts', postController.searchPosts);
+router.patch('/:postId/favorite', postController.handleFavorite);
+router.get('/:userId/collections', postController.getUserCollection);
+
 export default router;

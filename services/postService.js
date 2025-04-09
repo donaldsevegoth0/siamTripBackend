@@ -159,6 +159,60 @@ const searchPosts = async (query) => {
     }
 }
 
+const addFavorite = async (postId, userId) => {
+    try {
+        // 查找帖子
+        const post = await Post.findById(postId);
+        if (!post) {
+            throw new Error('Post not found');
+        }
+
+        // 判断该用户是否已经收藏
+        if (post.favoritedBy.some(fav => fav.toString() === userId)) {
+            removeFavorite(postId, userId);
+            throw new Error('You have already favorited this post');
+        }
+
+        // 将用户 ID 添加到收藏者数组中
+        post.favoritedBy.push(userId);
+
+        // 保存并返回更新后的帖子
+        await post.save({ validateBeforeSave: false });
+        return post;
+    } catch (error) {
+        throw new Error(`Error adding favorite: ${error.message}`);
+    }
+};
+
+// 移除收藏
+const removeFavorite = async (postId, userId) => {
+    try {
+        const post = await Post.findById(postId);
+        if (!post) {
+            throw new Error('Post not found');
+        }
+
+        // 从收藏者数组中移除用户 ID
+        post.favoritedBy = post.favoritedBy.filter(user => user.toString() !== userId);
+
+        // 保存并返回更新后的帖子
+        await post.save({ validateBeforeSave: false });
+        return post;
+    } catch (error) {
+        throw new Error(`Error removing favorite: ${error.message}`);
+    }
+};
+
+const getUserCollections = async (userId) => {
+    try {
+        const posts = await Post.find({ favoritedBy: userId });
+        return posts;
+    } catch (error) {
+        throw new Error('Error fetching user collections: ' + error.message);
+    }
+};
+
+
 export default {
-    getUserPosts, getAllPosts, getTop10RecommendedPosts, increaseViewCount, incrementLikeCount, incrementShareCount, createPost, searchPosts
+    getUserCollections, getUserPosts, getAllPosts, getTop10RecommendedPosts, increaseViewCount, incrementLikeCount, incrementShareCount, createPost, searchPosts, addFavorite, removeFavorite
 };
