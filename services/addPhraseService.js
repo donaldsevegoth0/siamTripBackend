@@ -9,20 +9,33 @@ const TTS_URL = `${process.env.TTS_URL}${GOOGLE_TTS_API_KEY}`;
 const GITHUB_REPO = process.env.GITHUB_REPO;
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 
-// 1. 翻译文本
 async function translateText(chinese) {
-    const urlTh = `https://lingva.ml/api/v1/auto/th/${encodeURIComponent(chinese)}`;
-    const urlEn = `https://lingva.ml/api/v1/auto/en/${encodeURIComponent(chinese)}`;
+    const baseUrl = 'https://libretranslate.com/translate';
+    const headers = { 'Content-Type': 'application/json' };
+
+    const bodyTh = {
+        q: chinese,
+        source: 'zh',
+        target: 'th',
+        format: 'text'
+    };
+
+    const bodyEn = {
+        q: chinese,
+        source: 'zh',
+        target: 'en',
+        format: 'text'
+    };
 
     try {
         const [responseTh, responseEn] = await Promise.all([
-            axios.get(urlTh),
-            axios.get(urlEn)
+            axios.post(baseUrl, bodyTh, { headers }),
+            axios.post(baseUrl, bodyEn, { headers })
         ]);
 
         return {
-            english: responseEn.data.translation,
-            thai: responseTh.data.translation
+            thai: responseTh.data.translatedText,
+            english: responseEn.data.translatedText
         };
     } catch (error) {
         console.error("Translation Error:", error.response?.data || error.message);
