@@ -6,42 +6,50 @@ dotenv.config();
 const GOOGLE_TTS_API_KEY = process.env.GOOGLE_TTS_API_KEY;
 const TTS_URL = `${process.env.TTS_URL}${GOOGLE_TTS_API_KEY}`;
 
+const GOOGLE_TRANSLATE_API_KEY = process.env.GOOGLE_TRANSLATE_API_KEY;
+
 const GITHUB_REPO = process.env.GITHUB_REPO;
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 
+console.log("GitHub token length:", GITHUB_TOKEN?.length);
+
+
+
+
 async function translateText(chinese) {
-    const baseUrl = 'https://libretranslate.com/translate';
-    const headers = { 'Content-Type': 'application/json' };
-
-    const bodyTh = {
-        q: chinese,
-        source: 'zh',
-        target: 'th',
-        format: 'text'
-    };
-
-    const bodyEn = {
-        q: chinese,
-        source: 'zh',
-        target: 'en',
-        format: 'text'
-    };
+    const baseUrl = 'https://translation.googleapis.com/language/translate/v2';
 
     try {
-        const [responseTh, responseEn] = await Promise.all([
-            axios.post(baseUrl, bodyTh, { headers }),
-            axios.post(baseUrl, bodyEn, { headers })
+        const [resTh, resEn] = await Promise.all([
+            axios.post(baseUrl, {
+                q: chinese,
+                source: 'zh',
+                target: 'th',
+                format: 'text'
+            }, {
+                params: { key: GOOGLE_TRANSLATE_API_KEY }
+            }),
+
+            axios.post(baseUrl, {
+                q: chinese,
+                source: 'zh',
+                target: 'en',
+                format: 'text'
+            }, {
+                params: { key: GOOGLE_TRANSLATE_API_KEY }
+            })
         ]);
 
         return {
-            thai: responseTh.data.translatedText,
-            english: responseEn.data.translatedText
+            thai: resTh.data.data.translations[0].translatedText,
+            english: resEn.data.data.translations[0].translatedText
         };
     } catch (error) {
-        console.error("Translation Error:", error.response?.data || error.message);
-        throw new Error("Translation failed");
+        console.error('Translation Error:', error.response?.data || error.message);
+        throw new Error('Translation failed');
     }
 }
+
 
 // 2. 生成 TTS 音频数据（不存本地）
 async function getTextToSpeechBase64(thaiText) {

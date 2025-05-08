@@ -27,6 +27,8 @@ async function createIndexes() {
 createIndexes();
 
 // 使用路由
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));  // 如果请求体是 x-www-form-urlencoded 格式
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/api", categoryRoutes);
