@@ -16,5 +16,7 @@ router.get('/userPosts', postController.getUserPosts);
 router.get('/searchPosts', postController.searchPosts);
 router.patch('/:postId/favorite', postController.handleFavorite);
 router.get('/:userId/collections', postController.getUserCollection);
+router.put('/:postId/edit', postController.editPost);
+router.delete('/:postId/delete', postController.deletePost);
 
 export default router;

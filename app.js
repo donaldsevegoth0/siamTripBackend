@@ -7,9 +7,19 @@ import userRoutes from "./routes/userRoutes.js";
 import Phrases from "./models/phraseModel.js";
 import postRoutes from "./routes/postRoutes.js";
 import bodyParser from "body-parser";
+import cors from "cors";
 
 const app = express();
 
+// Enable CORS (if you're allowing cross-origin requests)
+app.use(cors());
+
+// Set cross-origin isolation headers
+app.use((req, res, next) => {
+    res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
+    res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+    next();
+});
 
 // 连接数据库
 connectDB();
@@ -28,7 +38,7 @@ createIndexes();
 
 // 使用路由
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));  // 如果请求体是 x-www-form-urlencoded 格式
+app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/api", categoryRoutes);

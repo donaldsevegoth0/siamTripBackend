@@ -129,6 +129,34 @@ const getUserCollection = async (req, res) => {
     }
 };
 
+// 编辑帖子
+const editPost = async (req, res) => {
+    const { postId } = req.params;  // 获取帖子 ID
+    const { title, describe, location, images, tag } = req.body;  // 获取更新的内容
+    const { userId } = req.body;  // 获取请求中的用户 ID
+
+    try {
+        const updatedPost = await postService.updatePost(postId, { title, describe, location, images, tag }, userId);
+        res.status(200).json(updatedPost);  // 返回更新后的帖子
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+};
+
+// 删除帖子
+const deletePost = async (req, res) => {
+    const { postId } = req.params;  // 获取帖子 ID
+    const { userId } = req.body;  // 获取请求中的用户 ID
+
+    try {
+        const result = await postService.deletePost(postId, userId);
+        res.status(200).json(result);  // 返回删除成功的消息
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+};
+
+
 export default {
-    getUserCollection, getUserPosts, getPosts, getTop10RecommendedPosts, increasePostView, handleLike, handleShare, createPost, searchPosts, handleFavorite
+    getUserCollection, getUserPosts, getPosts, getTop10RecommendedPosts, increasePostView, handleLike, handleShare, createPost, searchPosts, handleFavorite, editPost, deletePost
 };

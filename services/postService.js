@@ -112,21 +112,13 @@ const createPost = async ({ title, describe, location, images, tag, createdBy })
             throw new Error('User not found');
         }
 
-        // 上传所有图片到 GitHub，并获取它们的下载链接
-        const imageLinks = [];
-        for (let i = 0; i < images.length; i++) {
-            const base64Image = images[i]; // images 是包含 base64 编码的图片数组
-            const fileName = `${createdBy}-${i + 1}.jpg`; // 图片命名为 createdBy + 图片序号
-            const imageUrl = await uploadImageToGitHub(base64Image, fileName);
-            imageLinks.push(imageUrl);
-        }
 
         // 创建新的帖子
         const newPost = new Post({
             title,
             describe,
             location,
-            images: imageLinks, // 将 GitHub 返回的图片链接存储在 images 字段中
+            images, // 将 GitHub 返回的图片链接存储在 images 字段中
             tag,
             createdBy
         });
@@ -251,7 +243,31 @@ const getUserCollections = async (userId) => {
     }
 };
 
+const updatePost = async (postId, updateData, userId) => {
+    try {
+        const post = await Post.findById(postId);
+        if (!post) throw new Error('Post not found');
+
+        Object.assign(post, updateData);
+        await post.save({ validateBeforeSave: false });
+        return post;
+    } catch (error) {
+        throw new Error('Error updating post: ' + error.message);
+    }
+};
+
+const deletePost = async (postId, userId) => {
+    try {
+        const post = await Post.findById(postId);
+        if (!post) throw new Error('Post not found');
+
+        await Post.findByIdAndDelete(postId);
+        return { message: 'Post deleted successfully' };
+    } catch (error) {
+        throw new Error('Error deleting post: ' + error.message);
+    }
+};
 
 export default {
-    getUserCollections, getUserPosts, getAllPosts, getTop10RecommendedPosts, increaseViewCount, incrementLikeCount, incrementShareCount, createPost, searchPosts, addFavorite, removeFavorite
+    getUserCollections, getUserPosts, getAllPosts, getTop10RecommendedPosts, increaseViewCount, incrementLikeCount, incrementShareCount, createPost, searchPosts, addFavorite, removeFavorite, updatePost, deletePost
 };
