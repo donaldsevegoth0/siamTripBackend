@@ -178,7 +178,6 @@ const addFavorite = async (postId, userId) => {
         // 判断该用户是否已经收藏
         if (post.favoritedBy.some(fav => fav.toString() === userId)) {
             removeFavorite(postId, userId);
-            throw new Error('You have already favorited this post');
         }
         else {
             // 将用户 ID 添加到收藏者数组中
