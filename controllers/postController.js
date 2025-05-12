@@ -105,27 +105,14 @@ const searchPosts = async (req, res) => {
     }
 }
 
-// 处理收藏（添加或取消）
+// 处理收藏
 const handleFavorite = async (req, res) => {
     const { postId } = req.params;  // 帖子 ID
     const { userId } = req.body;    // 用户 ID
 
     try {
-        const post = await postService.getPostById(postId);
-        if (!post) {
-            return res.status(404).json({ message: "Post not found" });
-        }
-
-        let updatedPost;
-        if (post.favorites.includes(userId)) {
-            // 如果已收藏，取消收藏
-            updatedPost = await postService.removeFavorite(postId, userId);
-        } else {
-            // 如果未收藏，添加收藏
-            updatedPost = await postService.addFavorite(postId, userId);
-        }
-
-        res.status(200).json(updatedPost);
+        const updatedPost = await postService.addFavorite(postId, userId);
+        res.status(200).json(updatedPost);  // 返回更新后的帖子
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
