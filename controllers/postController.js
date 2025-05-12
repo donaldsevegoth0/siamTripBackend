@@ -111,11 +111,6 @@ const handleFavorite = async (req, res) => {
     const { userId } = req.body;    // 用户 ID
 
     try {
-        const post = await postService.getPostById(postId);
-        if (!post) {
-            return res.status(404).json({ message: "Post not found" });
-        }
-
         let updatedPost;
         if (post.favorites.includes(userId)) {
             // 如果已收藏，取消收藏
