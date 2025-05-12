@@ -132,29 +132,6 @@ const createPost = async ({ title, describe, location, images, tag, createdBy })
     }
 };
 
-async function uploadImageToGitHub(base64Image, fileName) {
-    try {
-        const response = await axios.put(
-            `https://api.github.com/repos/${process.env.GITHUB_REPO_IMG}/contents/img/${fileName}`,
-            {
-                message: `Add ${fileName}`,
-                content: base64Image // 直接上传 base64 编码的音频
-            },
-            {
-                headers: {
-                    Authorization: `Bearer ${process.env.GITHUB_TOKEN_IMG}`,
-                    Accept: "application/vnd.github.v3+json"
-                }
-            }
-        );
-
-        return response.data.content.download_url; // 返回图片的下载链接
-    } catch (error) {
-        console.error("GitHub Upload Error:", error.response?.data || error.message);
-        throw new Error("Upload to GitHub failed");
-    }
-};
-
 
 const getUserPosts = async (userId) => {
     try {
