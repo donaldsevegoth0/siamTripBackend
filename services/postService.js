@@ -176,7 +176,7 @@ const addFavorite = async (postId, userId) => {
         }
         console.log(post.favoritedBy);
         // 判断该用户是否已经收藏
-        if (post.favoritedBy.some(fav => fav.toString() === userId)) {
+        if ((post.favoritedBy || []).some(fav => fav.toString() === userId)) {
             removeFavorite(postId, userId);
         }
         else {
