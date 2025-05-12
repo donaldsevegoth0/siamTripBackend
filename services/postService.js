@@ -169,44 +169,27 @@ const searchPosts = async (query) => {
 
 const addFavorite = async (postId, userId) => {
     try {
-        // 查找帖子
         const post = await Post.findById(postId);
         if (!post) {
             throw new Error('Post not found');
         }
-        console.log(post.favoritedBy);
-        // 判断该用户是否已经收藏
-        if ((post.favoritedBy || []).some(fav => fav.toString() === userId)) {
-            removeFavorite(postId, userId);
-        }
-        else {
-            // 将用户 ID 添加到收藏者数组中
+
+        post.favoritedBy = (post.favoritedBy || []).filter(Boolean);
+
+        const isFavorited = (post.favoritedBy || []).some(fav => fav.toString() === userId);
+
+        if (isFavorited) {
+            // 取消收藏
+            post.favoritedBy = post.favoritedBy.filter(fav => fav.toString() !== userId);
+        } else {
+            // 添加收藏
             post.favoritedBy.push(userId);
         }
-        // 保存并返回更新后的帖子
+
         await post.save({ validateBeforeSave: false });
         return post;
     } catch (error) {
-        throw new Error(`Error adding favorite: ${error.message}`);
-    }
-};
-
-// 移除收藏
-const removeFavorite = async (postId, userId) => {
-    try {
-        const post = await Post.findById(postId);
-        if (!post) {
-            throw new Error('Post not found');
-        }
-
-        // 从收藏者数组中移除用户 ID
-        post.favoritedBy = post.favoritedBy.filter(user => user.toString() !== userId);
-
-        // 保存并返回更新后的帖子
-        await post.save({ validateBeforeSave: false });
-        return post;
-    } catch (error) {
-        throw new Error(`Error removing favorite: ${error.message}`);
+        throw new Error(`Error toggling favorite: ${error.message}`);
     }
 };
 
@@ -245,5 +228,5 @@ const deletePost = async (postId, userId) => {
 };
 
 export default {
-    getUserCollections, getUserPosts, getAllPosts, getTop10RecommendedPosts, increaseViewCount, incrementLikeCount, incrementShareCount, createPost, searchPosts, addFavorite, removeFavorite, updatePost, deletePost
+    getUserCollections, getUserPosts, getAllPosts, getTop10RecommendedPosts, increaseViewCount, incrementLikeCount, incrementShareCount, createPost, searchPosts, addFavorite, updatePost, deletePost
 };
