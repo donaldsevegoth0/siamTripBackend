@@ -180,10 +180,10 @@ const addFavorite = async (postId, userId) => {
             removeFavorite(postId, userId);
             throw new Error('You have already favorited this post');
         }
-
-        // 将用户 ID 添加到收藏者数组中
-        post.favoritedBy.push(userId);
-
+        else {
+            // 将用户 ID 添加到收藏者数组中
+            post.favoritedBy.push(userId);
+        }
         // 保存并返回更新后的帖子
         await post.save({ validateBeforeSave: false });
         return post;
